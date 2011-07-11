@@ -7,7 +7,7 @@ class BingTests extends Specification("Bing Translate API tests") {
     shareVariables()
 
     // initialize the translation object
-    val api = new Translate with BingTranslate with BingConfig {
+    val api = new Translate with Bing with BingConfig {
       var appId = "A639B46D72A7DD8C40D882DC4546EBC44EA52513"
     }
 
