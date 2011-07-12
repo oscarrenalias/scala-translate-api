@@ -12,15 +12,13 @@ trait BingConfig {
 /**
  * Base class providing access to the Bing translation API, using the HTTP method
  */
-trait Bing extends BaseTranslationAPI with Logging {
+trait Bing extends BaseTranslationAPI with Logging with HttpSupport {
   this: BingConfig =>
   val baseUrl = "http://api.microsofttranslator.com/V2/Http.svc/"
   protected val httpErrorCodes = List(400, 401, 402, 403)
 
   def translate(text:String, from:Language, to:Language) = {
     import dispatch._
-    import scala.xml._
-
     val targetUrl = baseUrl + "Translate?" + Helpers.buildQuery(List("appId" -> this.appId, "text" -> text, "from" -> from.langCode, "to" -> to.langCode))
     log.debug("Bing target URL = " + targetUrl)
 

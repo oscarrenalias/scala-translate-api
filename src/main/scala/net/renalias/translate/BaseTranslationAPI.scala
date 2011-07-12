@@ -1,8 +1,5 @@
 package net.renalias.translate
 
-import net.renalias.logging.Logging
-import dispatch.Http
-
 sealed case class Language(val langCode:String)
 case object English extends Language("EN")
 case object Spanish extends Language("ES")
@@ -33,8 +30,16 @@ protected[translate] object Helpers {
  * and mix in the correct trait providing a specific API implementation
  */
 trait BaseTranslationAPI {
-  protected[translate] var newExecutor = () => new Http
   def translate(text:String, from:Language, to:Language): Either[TranslationFailure, TranslationResult]
+}
+
+/**
+ * Provides an Http client based on the Databinder Dispatch library for those APIs that need it. Please
+ * note that this client is synchronous and uses the thread-blocking request executor
+ */
+protected[translate] trait HttpSupport {
+  import dispatch._
+  var newExecutor = () => new Http
 }
 
 /**
