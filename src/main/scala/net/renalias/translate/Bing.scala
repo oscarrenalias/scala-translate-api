@@ -2,6 +2,16 @@ package net.renalias.translate
 
 import net.renalias.logging.Logging
 
+/**
+ * Used by the Bing API to provide the Bing app Id that is necessary for every API call
+ */
+trait BingConfig {
+  var appId:String
+}
+
+/**
+ * Base class providing access to the Bing translation API, using the HTTP method
+ */
 trait Bing extends BaseTranslationAPI with Logging {
   this: BingConfig =>
   val baseUrl = "http://api.microsofttranslator.com/V2/Http.svc/"
