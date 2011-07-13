@@ -1,6 +1,8 @@
 package net.renalias.translate
 
-import net.renalias.logging.Logging
+import net.renalias.logging._
+import dispatch.url
+import dispatch.StatusCode
 
 /**
  * Used by the Bing API to provide the Bing app Id that is necessary for every API call
@@ -17,9 +19,12 @@ trait Bing extends BaseTranslationAPI with Logging with HttpSupport {
   val baseUrl = "http://api.microsofttranslator.com/V2/Http.svc/"
   protected val httpErrorCodes = List(400, 401, 402, 403)
 
+  protected def buildTargetUrl(baseUrl:String, method:String, params:List[(String,String)]) = baseUrl + method + "?" + Helpers.buildQuery(params)
+
   def translate(text:String, from:Language, to:Language) = {
     import dispatch._
-    val targetUrl = baseUrl + "Translate?" + Helpers.buildQuery(List("appId" -> this.appId, "text" -> text, "from" -> from.langCode, "to" -> to.langCode))
+    //val targetUrl = baseUrl + "Translate?" + Helpers.buildQuery()
+    val targetUrl = buildTargetUrl(baseUrl, "Translate", List("appId" -> this.appId, "text" -> text, "from" -> from.langCode, "to" -> to.langCode))
     log.debug("Bing target URL = " + targetUrl)
 
     try {

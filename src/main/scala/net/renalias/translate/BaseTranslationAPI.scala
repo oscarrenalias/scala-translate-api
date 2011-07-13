@@ -1,5 +1,7 @@
 package net.renalias.translate
 
+import dispatch.HttpExecutor
+
 sealed case class Language(val langCode:String)
 case object English extends Language("EN")
 case object Spanish extends Language("ES")
@@ -34,12 +36,13 @@ trait BaseTranslationAPI {
 }
 
 /**
- * Provides an Http client based on the Databinder Dispatch library for those APIs that need it. Please
- * note that this client is synchronous and uses the thread-blocking request executor
+ * Provides an Http client based on the Databinder Dispatch library for those APIs that need it. Methods
+ * newExecutor and newAsyncExecutor provide blocking and non-blocking Http clients
  */
 protected[translate] trait HttpSupport {
   import dispatch._
   var newExecutor = () => new Http
+  var newAsyncExecutor = () => new nio.Http
 }
 
 /**
