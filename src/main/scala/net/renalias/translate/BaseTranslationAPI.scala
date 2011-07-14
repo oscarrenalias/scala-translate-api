@@ -2,11 +2,19 @@ package net.renalias.translate
 
 import dispatch.HttpExecutor
 
+// TODO: are all these languages really supported by all APIs?
 sealed case class Language(val langCode:String)
 case object English extends Language("EN")
 case object Spanish extends Language("ES")
 case object French extends Language("FR")
 case object German extends Language("DE")
+case object Italian extends Language("IT")
+case object Portuguese extends Language("PT")
+case object Russian extends Language("RU")
+case object Swedish extends Language("SE")
+case object Finnish extends Language("FI")
+case object Norwegian extends Language("NO")
+case object Dutch extends Language("NL")
 
 /**
  * Class that encapsulates an error response from an API call
