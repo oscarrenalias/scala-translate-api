@@ -58,10 +58,21 @@ protected[translate] trait HttpSupport {
  *
  * Use it like this:
  *
- * case object MyBingConfig extends BingConfig { appId= "your-bing-appId" }
+ * <code>
+ * trait MyBingConfig extends BingConfig { var appId= "your-bing-appId" }
  * val translator = new Translate with Bing with MyBingConfig
- * val text = translator.translate("text to translate", English, Spanish)
+ * val result = translator.translate("text to translate", English, Spanish)
+ * </code>
+ *
+ * Translation results are returned as an Either object, where Left indicates an error, wrapped
+ * in a TranslationFailure object and Right indicates success, wrapped in a TranslationResult object. Therefore,
+ * results can be processed as follows:
+ *
+ * <code>
+ * result match {
+ *  case Left(TranslationFailure(_, message, _)) => println("There was an error: " + message)
+ *  case Right(TranslationResult(text)) => println("translation result: " + text)
+ * }
+ * </code>
  */
-class Translate {
-  this: BaseTranslationAPI =>
-}
+abstract class Translate extends BaseTranslationAPI

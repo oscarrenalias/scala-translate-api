@@ -17,7 +17,16 @@ API usage:
 val translator = new Translate with Bing with new BingConfig {
 	val appId = "your-bing-app-id-goes-here"
 }
-val text = translator.translate("text to translate", English, Spanish)
+val result = translator.translate("text to translate", English, Spanish)
+```
+
+Translation results are returned as an Either object, where Left indicates an error, wrapped in a TranslationFailure object and Right indicates success, wrapped in a TranslationResult object. Therefore, results can be processed as follows:
+
+```xml
+result match {
+  case Left(TranslationFailure(_, message, _)) => println("There was an error: " + message)
+  case Right(TranslationResult(text)) => println("translation result: " + text)
+}
 ```
 
 Project setup
