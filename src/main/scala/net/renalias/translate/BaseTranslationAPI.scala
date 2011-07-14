@@ -1,7 +1,5 @@
 package net.renalias.translate
 
-import dispatch.HttpExecutor
-
 // TODO: are all these languages really supported by all APIs?
 sealed case class Language(val langCode:String)
 case object English extends Language("EN")
@@ -60,6 +58,7 @@ protected[translate] trait HttpSupport {
  *
  * Use it like this:
  *
+ * case object MyBingConfig extends BingConfig { appId= "your-bing-appId" }
  * val translator = new Translate with Bing with MyBingConfig
  * val text = translator.translate("text to translate", English, Spanish)
  */
