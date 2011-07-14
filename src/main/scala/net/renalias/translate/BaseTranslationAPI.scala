@@ -1,7 +1,7 @@
 package net.renalias.translate
 
 // TODO: are all these languages really supported by all APIs?
-sealed case class Language(val langCode:String)
+sealed class Language(val langCode:String)
 case object English extends Language("EN")
 case object Spanish extends Language("ES")
 case object French extends Language("FR")
