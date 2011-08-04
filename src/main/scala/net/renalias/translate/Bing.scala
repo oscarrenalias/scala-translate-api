@@ -35,7 +35,7 @@ trait Bing extends BaseTranslationAPI with Logging with HttpSupport {
         (result \\ "string").text
       })
 
-      Right(TranslationResult(newText))
+      Right(TranslationSuccess(newText))
     } catch {
       case ex:StatusCode => Left(TranslationFailure("http-error", "The server returned an HTTP error", Some(ex)))
       case ex:Exception => Left(TranslationFailure("error", "Error making the HTTP request", Some(ex)))

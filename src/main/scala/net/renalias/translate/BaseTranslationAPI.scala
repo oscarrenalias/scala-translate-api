@@ -1,4 +1,8 @@
-package net.renalias.translate
+package net.renalias
+
+import dispatch.Request
+
+package object translate {
 
 // TODO: are all these languages really supported by all APIs?
 sealed class Language(val langCode:String)
@@ -14,6 +18,8 @@ case object Finnish extends Language("FI")
 case object Norwegian extends Language("NO")
 case object Dutch extends Language("NL")
 
+type TranslationResult = Either[TranslationFailure, TranslationSuccess]
+
 /**
  * Class that encapsulates an error response from an API call
  */
@@ -22,12 +28,12 @@ case class TranslationFailure(val errorCode:String, val errorDescription:String,
 /**
  * Class that encapsulates a successful translation result
  */
-case class TranslationResult(val result:String) {
+case class TranslationSuccess(val result:String) {
   override def toString = result
 }
 
 protected[translate] object Helpers {
-  val buildParam = (p:(String,String)) => p._1 + "=" + p._2
+  val buildParam = (p:(String,String)) => p._1 + "=" + Request.encode_%(p._2)
   val buildQuery = (l:List[(String,String)]) => l.flatMap({params:(String,String) => List(buildParam(params))}).mkString("&")
 }
 
@@ -38,7 +44,7 @@ protected[translate] object Helpers {
  * and mix in the correct trait providing a specific API implementation
  */
 trait BaseTranslationAPI {
-  def translate(text:String, from:Language, to:Language): Either[TranslationFailure, TranslationResult]
+  def translate(text:String, from:Language, to:Language): TranslationResult
 }
 
 /**
@@ -65,14 +71,16 @@ protected[translate] trait HttpSupport {
  * </code>
  *
  * Translation results are returned as an Either object, where Left indicates an error, wrapped
- * in a TranslationFailure object and Right indicates success, wrapped in a TranslationResult object. Therefore,
+ * in a TranslationFailure object and Right indicates success, wrapped in a TranslationSuccess object. Therefore,
  * results can be processed as follows:
  *
  * <code>
  * result match {
  *  case Left(TranslationFailure(_, message, _)) => println("There was an error: " + message)
- *  case Right(TranslationResult(text)) => println("translation result: " + text)
+ *  case Right(TranslationSuccess(text)) => println("translation result: " + text)
  * }
  * </code>
  */
 abstract class Translate extends BaseTranslationAPI
+
+}
